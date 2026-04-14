@@ -41,7 +41,7 @@ const BookingDetails = ({ data }: Props) => {
               </tr>
               <tr>
                 <th scope="row">Amount Paid:</th>
-                <td>${booking?.amountPaid}</td>
+                <td>{booking?.amountPaid} VND</td>
               </tr>
             </tbody>
           </table>
@@ -77,6 +77,14 @@ const BookingDetails = ({ data }: Props) => {
                   <b className={isPaid ? "greenColor" : "redColor"}>
                     {isPaid ? "Paid" : "Not Paid"}
                   </b>
+                  {!isPaid && (
+                    <Link
+                      href={`/payment/${booking?._id}?amount=${booking?.amountPaid}`}
+                      className="btn btn-primary d-block mt-3"
+                    >
+                      <i className="fa fa-credit-card"></i> Pay with MoMo
+                    </Link>
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -101,7 +109,7 @@ const BookingDetails = ({ data }: Props) => {
               </div>
 
               <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                <p>${booking?.room?.pricePerNight}</p>
+                <p>{booking?.room?.pricePerNight} VND</p>
               </div>
 
               <div className="col-4 col-lg-3 mt-4 mt-lg-0">

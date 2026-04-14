@@ -11,7 +11,7 @@ const getBooking = async (id: string) => {
 
   const res = await fetch(
     `${process.env.API_URL}/api/bookings/${id}`,
-    authHeader
+    { ...authHeader, cache: "no-store" }
   );
   return res.json();
 };

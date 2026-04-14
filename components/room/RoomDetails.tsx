@@ -39,7 +39,12 @@ const RoomDetails = ({ data }: Props) => {
     const coordinates = room.location.coordinates as [number, number];
 
     if (mapRef.current) {
-      mapRef.current.remove();
+      try {
+        mapRef.current.remove();
+        mapRef.current = null;
+      } catch (err) {
+        console.error("Error removing map:", err);
+      }
     }
 
     mapRef.current = new mapboxgl.Map({
@@ -53,7 +58,14 @@ const RoomDetails = ({ data }: Props) => {
     new mapboxgl.Marker().setLngLat(coordinates).addTo(mapRef.current);
 
     return () => {
-      mapRef.current?.remove();
+      if (mapRef.current) {
+        try {
+          mapRef.current.remove();
+          mapRef.current = null;
+        } catch (err) {
+          // Ignore removal errors on unmount
+        }
+      }
     };
   }, [room]);
 

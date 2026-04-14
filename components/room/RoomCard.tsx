@@ -36,12 +36,12 @@ const RoomCard = ({ room }: Props) => {
               </Link>
             </h5>
             <span className="badge bg-primary rounded-pill ms-2 mt-1">
-              ${room?.pricePerNight}
+              {room?.pricePerNight} VND
             </span>
           </div>
 
           <p className="card-text text-muted small">{room?.address}</p>
-          
+
           <div className="d-flex align-items-center mt-auto">
             <StarRatings
               rating={room?.ratings}

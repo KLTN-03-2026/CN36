@@ -11,6 +11,7 @@ import React, { useState } from "react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useRouter } from "next/navigation";
 
 interface Props {
   room: IRoom;
@@ -58,7 +59,9 @@ const BookingDatePicker = ({ room }: Props) => {
     }
   };
 
-  const bookRoom = () => {
+  const router = useRouter();
+
+  const bookRoom = async () => {
     const bookingData = {
       room: room?._id,
       checkInDate,
@@ -66,17 +69,24 @@ const BookingDatePicker = ({ room }: Props) => {
       daysOfStay,
       amountPaid: room.pricePerNight * daysOfStay,
       paymentInfo: {
-        id: "STRIPE_ID",
-        status: "PAID",
+        id: "MOMO_DEMO",
+        status: "Not Paid",
       },
     };
-    newBooking(bookingData);
+    try {
+      const res = await newBooking(bookingData).unwrap();
+      if (res?.booking?._id) {
+        router.push(`/payment/${res.booking._id}?amount=${bookingData.amountPaid}`);
+      }
+    } catch (err) {
+      console.error("Booking failed:", err);
+    }
   };
 
   return (
     <div className="booking-card shadow p-4">
       <p className="price-per-night">
-        <b>${room?.pricePerNight}</b> / night
+        <b>{room?.pricePerNight} VND</b> / night
       </p>
 
       <hr />
