@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 const Search = () => {
+  const { t } = useLanguage();
   const [location, setLocation] = useState("");
   const [guests, setGuests] = useState("");
   const [category, setCategory] = useState("");
@@ -28,17 +30,16 @@ const Search = () => {
     <div className="row wrapper mt-5">
       <div className="col-10 col-lg-5">
         <form className="shadow rounded" onSubmit={submitHandler}>
-          <h2 className="mb-3">Search Rooms</h2>
+          <h2 className="mb-3">{t("search.title")}</h2>
           <div className="form-group mt-3">
             <label htmlFor="location_field" className="mb-1">
-              {" "}
-              Location{" "}
+              {t("search.location")}
             </label>
             <input
               type="text"
               className="form-control"
               id="location_field"
-              placeholder="new york"
+              placeholder="e.g. Da Nang"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -46,8 +47,7 @@ const Search = () => {
 
           <div className="form-group mt-3">
             <label htmlFor="guest_field" className="mb-1">
-              {" "}
-              No. of Guests{" "}
+              {t("search.guests")}
             </label>
             <select
               className="form-select"
@@ -65,8 +65,7 @@ const Search = () => {
 
           <div className="form-group mt-3">
             <label htmlFor="room_type_field" className="mb-1">
-              {" "}
-              Room Type{" "}
+              {t("search.room_type")}
             </label>
             <select
               className="form-select"
@@ -83,12 +82,13 @@ const Search = () => {
           </div>
 
           <button type="submit" className="btn form-btn w-100 py-2">
-            Search
+            {t("search.button")}
           </button>
         </form>
       </div>
     </div>
   );
 };
+
 
 export default Search;

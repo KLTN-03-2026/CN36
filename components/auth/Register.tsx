@@ -10,8 +10,10 @@ import React, {
 } from "react";
 import { toast } from "react-hot-toast";
 import ButtonLoader from "../layout/ButtonLoader";
+import { useLanguage } from "../../context/LanguageContext";
 
 const Register = () => {
+  const { t } = useLanguage();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -31,7 +33,7 @@ const Register = () => {
 
     if (isSuccess) {
       router.push("/login");
-      toast.success("Account Registered. You can login now");
+      toast.success(t("auth.registration_success") || "Account Registered. You can login now");
     }
   }, [error, isSuccess]);
 
@@ -55,12 +57,11 @@ const Register = () => {
     <div className="wrapper">
       <div className="col-10 col-lg-5">
         <form className="shadow rounded bg-body" onSubmit={submitHandler}>
-          <h2 className="mb-4">Join Us</h2>
+          <h2 className="mb-4">{t("auth.register_title")}</h2>
 
           <div className="mb-3">
             <label htmlFor="name_field" className="form-label">
-              {" "}
-              Full Name{" "}
+              {t("auth.name")}
             </label>
             <input
               type="text"
@@ -74,8 +75,7 @@ const Register = () => {
 
           <div className="mb-3">
             <label className="form-label" htmlFor="email_field">
-              {" "}
-              Email{" "}
+              {t("auth.email")}
             </label>
             <input
               type="email"
@@ -89,8 +89,7 @@ const Register = () => {
 
           <div className="mb-3">
             <label className="form-label" htmlFor="password_field">
-              {" "}
-              Password{" "}
+              {t("auth.password")}
             </label>
             <input
               type="password"
@@ -103,13 +102,14 @@ const Register = () => {
             />
           </div>
 
-          <button type="submit" className="btn form-btn w-100 py-2">
-            {isLoading ? <ButtonLoader /> : "Register"}
+          <button type="submit" className="form-btn w-100 py-2">
+            {isLoading ? <ButtonLoader /> : t("auth.register_title")}
           </button>
         </form>
       </div>
     </div>
   );
 };
+
 
 export default Register;

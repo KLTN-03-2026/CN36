@@ -2,7 +2,7 @@ import Home from "@/components/Home";
 import Error from "./error";
 
 export const metadata = {
-  title: "HomePage - BookIT",
+  title: "HomePage",
 };
 
 const getRooms = async (searchParams: string) => {

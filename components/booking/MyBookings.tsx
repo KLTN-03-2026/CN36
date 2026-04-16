@@ -1,7 +1,9 @@
 "use client";
 
 import { IBooking } from "@/backend/models/booking";
-import { MDBDataTable } from "mdbreact";
+import dynamic from "next/dynamic";
+const MDBDataTable = dynamic(() => import("mdbreact").then((mod) => mod.MDBDataTable), { ssr: false });
+
 import Link from "next/link";
 import React from "react";
 

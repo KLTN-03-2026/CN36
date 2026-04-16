@@ -38,12 +38,58 @@ export const userApi = createApi({
         };
       },
     }),
+    getAdminUsers: builder.query({
+      query() {
+        return {
+          url: "/admin/users",
+        };
+      },
+    }),
+    getUserDetails: builder.query({
+      query(id) {
+        return {
+          url: `/admin/users/${id}`,
+        };
+      },
+    }),
+    updateAdminUser: builder.mutation({
+      query({ id, body }) {
+        return {
+          url: `/admin/users/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+    }),
+    deleteUser: builder.mutation({
+      query(id) {
+        return {
+          url: `/admin/users/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
+    getAuditLogs: builder.query({
+      query() {
+        return {
+          url: "/admin/logs",
+        };
+      },
+    }),
   }),
 });
+
 
 export const {
   useUpdateProfileMutation,
   useLazyUpdateSessionQuery,
   useUpdatePasswordMutation,
   useUploadAvatarMutation,
+  useGetAdminUsersQuery,
+  useGetUserDetailsQuery,
+  useUpdateAdminUserMutation,
+  useDeleteUserMutation,
+  useGetAuditLogsQuery,
 } = userApi;
+
+

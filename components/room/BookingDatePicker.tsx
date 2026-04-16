@@ -12,12 +12,14 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Props {
   room: IRoom;
 }
 
 const BookingDatePicker = ({ room }: Props) => {
+  const { t } = useLanguage();
   const [checkInDate, setCheckInDate] = useState(new Date());
   const [checkOutDate, setCheckOutDate] = useState(new Date());
   const [daysOfStay, setDaysOfStay] = useState(0);
@@ -86,12 +88,12 @@ const BookingDatePicker = ({ room }: Props) => {
   return (
     <div className="booking-card shadow p-4">
       <p className="price-per-night">
-        <b>{room?.pricePerNight} VND</b> / night
+        <b>{room?.pricePerNight?.toLocaleString()} VND</b> / {t("room.per_night")}
       </p>
 
       <hr />
 
-      <p className="mt5 mb-3">Pick Check In & Check Out Date</p>
+      <p className="mt5 mb-3">{t("booking.pick_dates")}</p>
 
       <DatePicker
         className="w-100"
@@ -107,20 +109,21 @@ const BookingDatePicker = ({ room }: Props) => {
 
       {isAvailable === true && (
         <div className="alert alert-success my-3">
-          Room is available. Book now.
+          {t("booking.available")}
         </div>
       )}
       {isAvailable === false && (
         <div className="alert alert-danger my-3">
-          Room not available. Try different dates.
+          {t("booking.not_available")}
         </div>
       )}
 
-      <button className="btn py-3 form-btn w-100" onClick={bookRoom}>
-        Pay
+      <button className=" py-3 form-btn w-100" onClick={bookRoom}>
+        {t("booking.pay")}
       </button>
     </div>
   );
 };
 
 export default BookingDatePicker;
+

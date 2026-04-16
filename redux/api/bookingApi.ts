@@ -27,11 +27,54 @@ export const bookingApi = createApi({
         };
       },
     }),
+    stripeCheckout: builder.query({
+      query({ id, checkoutData }) {
+        return {
+          url: `/payment/checkout_session/${id}`,
+          params: {
+            checkInDate: checkoutData.checkInDate,
+            checkOutDate: checkoutData.checkOutDate,
+            daysOfStay: checkoutData.daysOfStay,
+            amount: checkoutData.amount,
+          },
+        };
+      },
+    }),
+
+    getSalesStats: builder.query({
+      query({ startDate, endDate }) {
+        return {
+          url: `/admin/sales_stats?startDate=${startDate}&endDate=${endDate}`,
+        };
+      },
+    }),
+
+    getAdminBookings: builder.query({
+      query() {
+        return {
+          url: "/admin/bookings",
+        };
+      },
+    }),
+
+    deleteBooking: builder.mutation({
+      query(id) {
+        return {
+          url: `/admin/bookings/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
   }),
 });
+
 
 export const {
   useNewBookingMutation,
   useLazyCheckBookingAvailabilityQuery,
   useGetBookedDatesQuery,
-} = bookingApi;
+  useLazyStripeCheckoutQuery,
+  useLazyGetSalesStatsQuery,
+  useGetAdminBookingsQuery,
+  useDeleteBookingMutation,
+} = bookingApi;

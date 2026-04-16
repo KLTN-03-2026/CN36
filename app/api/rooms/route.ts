@@ -1,9 +1,10 @@
 import dbConnect from "@/backend/config/dbConnect";
 import { allRooms } from "@/backend/controllers/roomControllers";
+import { isAuthenticatedUser, authorizeRoles } from "@/backend/middlewares/auth";
 import { createEdgeRouter } from "next-connect";
 import { NextRequest } from "next/server";
 
-interface RequestContext {}
+interface RequestContext { }
 
 const router = createEdgeRouter<NextRequest, RequestContext>();
 

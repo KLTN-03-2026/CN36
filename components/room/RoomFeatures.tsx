@@ -1,21 +1,28 @@
 import { IRoom } from "@/backend/models/room";
 import React from "react";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface Props {
   room: IRoom;
 }
 
 const RoomFeatures = ({ room }: Props) => {
+  const { t } = useLanguage();
+
   return (
     <div className="features mt-5">
-      <h3 className="mb-4">Features:</h3>
+      <h3 className="mb-4">{t("room.features")}:</h3>
       <div className="room-feature">
         <i className="fa fa-cog fa-fw fa-users" aria-hidden="true"></i>
-        <p>{room?.guestCapacity} Guests</p>
+        <p>
+          {room?.guestCapacity} {t("room.guests_label")}
+        </p>
       </div>
       <div className="room-feature">
         <i className="fa fa-cog fa-fw fa-bed" aria-hidden="true"></i>
-        <p>{room?.numOfBeds} Beds</p>
+        <p>
+          {room?.numOfBeds} {t("room.beds_label")}
+        </p>
       </div>
       <div className="room-feature">
         <i
@@ -26,7 +33,7 @@ const RoomFeatures = ({ room }: Props) => {
           }
           aria-hidden="true"
         ></i>
-        <p>Breakfast</p>
+        <p>{t("room.breakfast")}</p>
       </div>
       <div className="room-feature">
         <i
@@ -37,7 +44,7 @@ const RoomFeatures = ({ room }: Props) => {
           }
           aria-hidden="true"
         ></i>
-        <p>Internet</p>
+        <p>{t("room.internet")}</p>
       </div>
       <div className="room-feature">
         <i
@@ -48,7 +55,7 @@ const RoomFeatures = ({ room }: Props) => {
           }
           aria-hidden="true"
         ></i>
-        <p>Air Conditioned</p>
+        <p>{t("room.air_conditioned")}</p>
       </div>
       <div className="room-feature">
         <i
@@ -59,7 +66,7 @@ const RoomFeatures = ({ room }: Props) => {
           }
           aria-hidden="true"
         ></i>
-        <p>Pets Allowed</p>
+        <p>{t("room.pets_allowed")}</p>
       </div>
       <div className="room-feature">
         <i
@@ -70,10 +77,11 @@ const RoomFeatures = ({ room }: Props) => {
           }
           aria-hidden="true"
         ></i>
-        <p>Room Cleaning</p>
+        <p>{t("room.room_cleaning")}</p>
       </div>
     </div>
   );
 };
 
 export default RoomFeatures;
+

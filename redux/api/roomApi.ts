@@ -4,6 +4,13 @@ export const roomApi = createApi({
     reducerPath: "roomApi",
     baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
     endpoints: (builder) => ({
+        canUserReview: builder.query({
+            query(id) {
+                return {
+                    url: `/reviews/can_review?roomId=${id}`,
+                };
+            },
+        }),
         postReview: builder.mutation({
             query(body) {
                 return {
@@ -13,9 +20,76 @@ export const roomApi = createApi({
                 };
             },
         }),
+        newRoom: builder.mutation({
+            query(body) {
+                return {
+                    url: "/admin/rooms",
+                    method: "POST",
+                    body,
+                };
+            },
+        }),
+        updateRoom: builder.mutation({
+            query({ id, body }) {
+                return {
+                    url: `/admin/rooms/${id}`,
+                    method: "PUT",
+                    body,
+                };
+            },
+        }),
+        uploadRoomImages: builder.mutation({
+            query({ id, body }) {
+                return {
+                    url: `/admin/rooms/${id}/upload_images`,
+                    method: "PUT",
+                    body,
+                };
+            },
+        }),
+        deleteRoomImage: builder.mutation({
+            query({ id, body }) {
+                return {
+                    url: `/admin/rooms/${id}/delete_image`,
+                    method: "PUT",
+                    body,
+                };
+            },
+        }),
+        deleteRoom: builder.mutation({
+            query(id) {
+                return {
+                    url: `/admin/rooms/${id}`,
+                    method: "DELETE",
+                };
+            },
+        }),
+        getAdminReviews: builder.query({
+            query(id) {
+                return {
+                    url: `/admin/reviews?roomId=${id}`,
+                };
+            },
+        }),
+        deleteReview: builder.mutation({
+            query({ id, roomId }) {
+                return {
+                    url: `/admin/reviews?id=${id}&roomId=${roomId}`,
+                    method: "DELETE",
+                };
+            },
+        }),
     }),
 });
 
 export const {
     usePostReviewMutation,
-} = roomApi;
+    useCanUserReviewQuery,
+    useNewRoomMutation,
+    useUpdateRoomMutation,
+    useUploadRoomImagesMutation,
+    useDeleteRoomImageMutation,
+    useDeleteRoomMutation,
+    useLazyGetAdminReviewsQuery,
+    useDeleteReviewMutation,
+} = roomApi;

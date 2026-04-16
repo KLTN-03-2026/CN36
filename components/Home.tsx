@@ -15,7 +15,10 @@ interface Props {
     rooms: IRoom[];
   };
 }
+import { useLanguage } from "../context/LanguageContext";
+
 const Home = ({ data }: Props) => {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const location = searchParams.get("location");
 
@@ -25,16 +28,16 @@ const Home = ({ data }: Props) => {
       <section id="rooms" className="container mt-5">
         <h2 className="mb-3 ml-2 stays-heading">
           {location
-            ? `${filteredRoomsCount} rooms found in ${location}`
-            : "All Rooms"}
+            ? `${filteredRoomsCount} ${t("home.rooms_count")} ${location}`
+            : t("home.all_rooms")}
         </h2>
         <Link href="/search" className="ml-2 back-to-search">
-          <i className="fa fa-arrow-left me-1"></i> Back to Search
+          <i className="fa fa-arrow-left me-1"></i> {t("home.back_to_search")}
         </Link>
         <div className="row mt-4">
           {rooms?.length === 0 ? (
             <div className="alert alert-danger mt-5 w-100">
-              <b>No Rooms.</b>
+              <b>{t("home.no_rooms")}</b>
             </div>
           ) : (
             rooms?.map((room) => <RoomItem key={room._id} room={room} />)
@@ -49,5 +52,6 @@ const Home = ({ data }: Props) => {
     </div>
   );
 };
+
 
 export default Home;

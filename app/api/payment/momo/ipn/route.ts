@@ -2,7 +2,7 @@ import { createEdgeRouter } from "next-connect";
 import { NextRequest } from "next/server";
 import { momoIpnCallback } from "@/backend/controllers/paymentControllers";
 
-interface RequestContext {}
+interface RequestContext { }
 
 const router = createEdgeRouter<NextRequest, RequestContext>();
 

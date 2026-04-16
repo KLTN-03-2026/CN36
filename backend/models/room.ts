@@ -166,6 +166,10 @@ const roomSchema: Schema<IRoom> = new Schema({
 
 // Setting up location
 roomSchema.pre("save", async function (next) {
+  if (!this.isModified("address")) {
+    return next();
+  }
+
   const loc = await geoCoder.geocode(this.address);
 
   this.location = {
@@ -178,6 +182,7 @@ roomSchema.pre("save", async function (next) {
     country: loc[0].countryCode,
   };
 });
+
 
 export default mongoose.models.Room ||
   mongoose.model<IRoom>("Room", roomSchema);

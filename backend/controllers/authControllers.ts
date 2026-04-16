@@ -163,3 +163,113 @@ export const resetPassword = catchAsyncErrors(
     });
   }
 );
+
+// Get all users - ADMIN  =>  /api/admin/users
+export const allAdminUsers = catchAsyncErrors(async (req: NextRequest) => {
+  const users = await User.find();
+
+  return NextResponse.json({
+    users,
+  });
+});
+
+// Get user details - ADMIN  =>  /api/admin/users/:id
+export const getUserDetails = catchAsyncErrors(
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const user = await User.findById(params.id);
+
+    if (!user) {
+      throw new ErrorHandler("User not found", 404);
+    }
+
+    return NextResponse.json({
+      user,
+    });
+  }
+);
+
+import Log from "../models/log";
+
+// Update user - ADMIN  =>  /api/admin/users/:id
+export const updateUser = catchAsyncErrors(
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const body = await req.json();
+
+    const user = await User.findById(params.id);
+
+    if (!user) {
+      throw new ErrorHandler("User not found", 404);
+    }
+
+    const userData: any = {
+      name: body.name,
+      email: body.email,
+    };
+
+    // Only admin can change roles
+    if (body.role && body.role !== user.role) {
+      if (req.user.role !== "admin") {
+        throw new ErrorHandler(
+          "Staff members are not allowed to change user roles",
+          403
+        );
+      }
+      userData.role = body.role;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(params.id, userData, {
+      new: true,
+    });
+
+    // Create Audit Log
+    await Log.create({
+      user: req.user._id,
+      action: "Updated User",
+      target: user.name,
+      details: `Updated info for ${user.email}. Role change attempted: ${
+        body.role !== user.role
+      }`,
+    });
+
+    return NextResponse.json({
+      success: true,
+      user: updatedUser,
+    });
+  }
+);
+
+
+// Delete user - ADMIN  =>  /api/admin/users/:id
+export const deleteUser = catchAsyncErrors(
+  async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const user = await User.findById(params.id);
+
+    if (!user) {
+      throw new ErrorHandler("User not found", 404);
+    }
+
+    // Remove avatar from cloudinary
+    if (user?.avatar?.public_id) {
+      await delete_file(user?.avatar?.public_id);
+    }
+
+    await user.deleteOne();
+
+    return NextResponse.json({
+      success: true,
+    });
+  }
+);
+
+// Get all audit logs - ADMIN  =>  /api/admin/logs
+export const getAuditLogs = catchAsyncErrors(async (req: NextRequest) => {
+  const logs = await Log.find()
+    .populate("user", "name email")
+    .sort({ createdAt: -1 });
+
+  return NextResponse.json({
+    logs,
+  });
+});
+
+

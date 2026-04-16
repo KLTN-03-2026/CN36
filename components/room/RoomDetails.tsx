@@ -8,7 +8,7 @@ import RoomFeatures from "./RoomFeatures";
 import BookingDatePicker from "./BookingDatePicker";
 import ListReviews from "../review/ListReviews";
 import NewReview from "../review/NewReview";
-import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
+import mapboxgl from "mapbox-gl";
 import type { Map as MapboxMap } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -20,15 +20,17 @@ interface Props {
 
 
 
+import { useLanguage } from "../../context/LanguageContext";
+
 const RoomDetails = ({ data }: Props) => {
+  const { t } = useLanguage();
   const { room } = data;
 
   const mapRef = useRef<MapboxMap | null>(null);
-
   useEffect(() => {
     if (!room?.location) return;
 
-    const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+    const token = process.env.MAPBOX_ACCESS_TOKEN;
     if (!token) {
       console.error("Mapbox access token is missing!");
       return;
@@ -83,13 +85,15 @@ const RoomDetails = ({ data }: Props) => {
           starSpacing="1px"
           name="rating"
         />
-        <span className="no-of-reviews">({room?.numOfReviews} Reviews)</span>
+        <span className="no-of-reviews">
+          ({room?.numOfReviews} {t("room.reviews")})
+        </span>
       </div>
       <RoomImageSlider images={room?.images} />
 
       <div className="row my-5">
         <div className="col-12 col-md-6 col-lg-8">
-          <h3>Description</h3>
+          <h3>{t("room.description")}</h3>
           <p>{room?.description}</p>
 
           <RoomFeatures room={room} />
@@ -100,7 +104,7 @@ const RoomDetails = ({ data }: Props) => {
 
           {room?.location && (
             <div className="my-5">
-              <h4 className="my-2">Room Location:</h4>
+              <h4 className="my-2">{t("room.location_title")}:</h4>
               <div
                 id="room-map"
                 className="shadow rounded"
@@ -116,5 +120,6 @@ const RoomDetails = ({ data }: Props) => {
     </div>
   );
 };
+
 
 export default RoomDetails;

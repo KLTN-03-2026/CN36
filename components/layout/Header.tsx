@@ -6,11 +6,13 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 const Header = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-
   const { data } = useSession();
+  const { locale, setLocale, t } = useLanguage();
 
   useEffect(() => {
     if (data) {
@@ -30,17 +32,50 @@ const Header = () => {
           <div className="navbar-brand">
             <a href="/">
               <img
-                style={{ cursor: "pointer" }}
-                src="/images/bookit_logo.png"
-                alt="BookIT"
+                style={{ cursor: "pointer", width: "250px", height: "80px" }}
+                src="/images/logo.jpg"
+                alt="DTUBOOKING"
               />
             </a>
           </div>
         </div>
 
-        <div className="col-6 col-lg-3 mt-3 mt-md-0 text-end">
+        <div className="col-6 col-lg-5 mt-3 mt-md-0 text-end d-flex align-items-center justify-content-end">
+          {/* Language Switcher */}
+          <div className="dropdown me-4">
+            <button
+              className="btn btn-sm dropdown-toggle text-dark border d-flex align-items-center shadow-sm"
+              type="button"
+              id="languageDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{ borderRadius: '20px', minWidth: '100px', height: '36px', backgroundColor: '#fff' }}
+            >
+              <i className="fas fa-globe me-2 text-danger"></i>
+              <span className="fw-bold">{t("nav.language_name")}</span>
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="languageDropdown">
+              <li>
+                <button
+                  className={`dropdown-item ${locale === 'en' ? 'active' : ''}`}
+                  onClick={() => setLocale("en")}
+                >
+                  English (EN)
+                </button>
+              </li>
+              <li>
+                <button
+                  className={`dropdown-item ${locale === 'vi' ? 'active' : ''}`}
+                  onClick={() => setLocale("vi")}
+                >
+                  Tiếng Việt (VI)
+                </button>
+              </li>
+            </ul>
+          </div>
+
           {user ? (
-            <div className="ml-4 dropdown d-line">
+            <div className="dropdown d-line">
               <button
                 className="btn dropdown-toggle"
                 type="button"
@@ -55,7 +90,7 @@ const Header = () => {
                         ? user?.avatar?.url
                         : "/images/default_avatar.jpg"
                     }
-                    alt="John Doe"
+                    alt={user?.name}
                     className="rounded-circle placeholder-glow"
                     height="50"
                     width="50"
@@ -68,21 +103,23 @@ const Header = () => {
                 className="dropdown-menu w-100"
                 aria-labelledby="dropdownMenuButton1"
               >
-                <Link href="/admin/dashboard" className="dropdown-item">
-                  Dashboard
-                </Link>
+                {["admin", "staff"].includes(user?.role) && (
+                  <Link href="/admin/dashboard" className="dropdown-item">
+                    {t("nav.dashboard")}
+                  </Link>
+                )}
                 <Link href="/bookings/me" className="dropdown-item">
-                  My Bookings
+                  {t("nav.my_bookings")}
                 </Link>
                 <Link href="/me/update" className="dropdown-item">
-                  Profile
+                  {t("nav.profile")}
                 </Link>
                 <Link
                   href="/"
                   className="dropdown-item text-danger"
                   onClick={logoutHandler}
                 >
-                  Logout
+                  {t("nav.logout")}
                 </Link>
               </div>
             </div>
@@ -99,7 +136,7 @@ const Header = () => {
                   href="/login"
                   className="btn btn-danger px-4 text-white login-header-btn float-right"
                 >
-                  Login
+                  {t("nav.login")}
                 </Link>
               )}
             </>
@@ -109,5 +146,6 @@ const Header = () => {
     </nav>
   );
 };
+
 
 export default Header;
